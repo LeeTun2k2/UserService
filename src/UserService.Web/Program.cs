@@ -12,15 +12,19 @@ using MediatR;
 using Serilog;
 using Serilog.Extensions.Logging;
 using UserService.Core.Aggregates.ContributorAggregate;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+var logDirectory = Path.Combine("var", "logs");
 
 var logger = Log.Logger = new LoggerConfiguration()
   .Enrich.FromLogContext()
   .WriteTo.Console()
+  .WriteTo.Http($"{builder.Configuration["LogStash:Server"]}:{builder.Configuration["LogStash:Port"]}", 1024)
   .CreateLogger();
 
 logger.Information("Starting web host");
-
-var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 var microsoftLogger = new SerilogLoggerFactory(logger)
@@ -88,7 +92,7 @@ static void SeedDatabase(WebApplication app)
   try
   {
     var context = services.GetRequiredService<AppDbContext>();
-    //          context.Database.Migrate();
+    context.Database.Migrate();
     context.Database.EnsureCreated();
     SeedData.Initialize(services);
   }

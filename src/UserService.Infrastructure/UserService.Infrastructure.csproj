@@ -4,6 +4,7 @@
   <ItemGroup>
     <PackageReference Include="Ardalis.SharedKernel" />
     <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" />
+    <PackageReference Include="Confluent.Kafka" />
     <PackageReference Include="MailKit" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" PrivateAssets="all" />
@@ -21,6 +22,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Folder Include="Data\Migrations\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
 </Project>
